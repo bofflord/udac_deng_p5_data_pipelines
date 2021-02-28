@@ -24,7 +24,7 @@ class LoadDimensionOperator(BaseOperator):
         self.log.info('Connect to redshift db')
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
-        if (insert_mode=="delete-load"):
+        if (self.insert_mode=="delete-load"):
             self.log.info(f'Insert mode delete-load. Truncate table {self.table}')
             trunquate_sql = """
                             TRUNCATE {}
