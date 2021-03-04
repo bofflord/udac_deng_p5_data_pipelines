@@ -22,9 +22,8 @@ class StageToRedshiftOperator(BaseOperator):
                  table="",
                  s3_bucket="",
                  s3_key="",
-                 json="auto",
+                 json="auto ignorecase",
                  region="us-west-2",
-                 #create_table_sql="",
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
@@ -35,16 +34,12 @@ class StageToRedshiftOperator(BaseOperator):
         self.json = json
         self.region = region
         self.aws_credentials_id = aws_credentials_id
-        #self.create_table_sql = create_table_sql
 
     def execute(self, context):
         self.log.info('Get AWS credentials...')
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
-        
-        #self.log.info("Create destination Redshift table if it does not exist")
-        #redshift.run(self.create_table_sql)
         
         self.log.info("Clearing data from destination Redshift table")
         redshift.run("DELETE FROM {}".format(self.table))

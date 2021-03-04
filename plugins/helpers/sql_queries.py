@@ -1,6 +1,7 @@
 class SqlQueries:
     songplay_table_insert = ("""
         SELECT
+                md5(events.sessionid || events.start_time) songplay_id,
                 events.start_time, 
                 events.userid, 
                 events.level, 
@@ -18,6 +19,7 @@ class SqlQueries:
                 AND events.length = songs.duration
        WHERE events.start_time IS NOT NULL
        AND events.userid IS NOT NULL
+       AND events.sessionid IS NOT NULL
     """)
 
     user_table_insert = ("""

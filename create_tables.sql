@@ -7,7 +7,7 @@ CREATE TABLE public.artists (
 );
 
 CREATE TABLE public.songplays (
-	songplay_id INT IDENTITY(0,1),
+	playid varchar(32) NOT NULL,
 	start_time timestamp NOT NULL,
 	userid int4 NOT NULL,
 	"level" varchar(256),
@@ -16,7 +16,7 @@ CREATE TABLE public.songplays (
 	sessionid int4,
 	location varchar(256),
 	user_agent varchar(256),
-	CONSTRAINT songplays_pkey PRIMARY KEY (songplay_id)
+	CONSTRAINT songplays_pkey PRIMARY KEY (playid)
 );
 
 CREATE TABLE public.songs (

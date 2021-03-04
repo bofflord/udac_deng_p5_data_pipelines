@@ -34,6 +34,8 @@ stage_events_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     s3_bucket="udacity-dend",
     s3_key="log_data",
+    json="auto ignorecase",
+    region="us-west-2",
     #create_table_sql=SqlQueries.staging_events_table_create
 )
 
@@ -45,6 +47,8 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     aws_credentials_id="aws_credentials",
     s3_bucket="udacity-dend",
     s3_key="song_data",
+    json="auto ignorecase",
+    region="us-west-2",
     #create_table_sql=SqlQueries.staging_songs_table_create
 )
 
