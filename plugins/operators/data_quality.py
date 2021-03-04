@@ -34,7 +34,7 @@ class DataQualityOperator(BaseOperator):
             if len(records) < 1 or len(records[0]) < 1:
                 raise ValueError(f"Data quality check failed. Check returned no results.")
             num_records = records[0][0]
-            if operator_dict[dq_dict['comparison']](num_records, check_dict['expected_result']):
+            if operator_dict[check_dict['comparison']](num_records, check_dict['expected_result']):
                 raise ValueError(f"Data quality check failed. Check returned not a value {check_dict['check_sql']} {check_dict['expected_result']}.")
             self.log.info(f"Data quality check on table passed with {records[0][0]} records")
         
