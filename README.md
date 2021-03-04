@@ -159,7 +159,11 @@ Dimension table describes time and data information based on the provided timest
 - For each the test, the test result and expected result needs to be checked and if there is no match, the operator should raise an exception and the task should retry and fail eventually.
 - parameters:
 	- redshift_conn_id : name of Airflow connection to AWS Redshift database.
-    - sql_checks: list of sql queries for data quality checks. Data quality checks succeed, if the returned record are greater than one and not null.
+    - dq_checks : dictionary of data quality checks. The dictionary contains the following keys:
+    	- 'check_sql': SQL query for quality check. 
+        - 'expected_result': comparison value against result of sql query. 
+        - 'comparison': operator that compares query result (to left of operator) to expected result (to right of operator).
+    - Data quality checks succeed, if the returned record are greater than one and not null.
 
 ## Example queries
 - get number of users per level:  
