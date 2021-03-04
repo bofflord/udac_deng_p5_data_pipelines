@@ -141,66 +141,25 @@ Dimension table describes time and data information based on the provided timest
 #### Fact Operator load_fact.py
 - creates fact table from data in staging tables.
 - parameters:
-	- tbd
+	- redshift_conn_id : name of Airflow connection to AWS Redshift database.
+    - table : name of target AWS Redshift database facts table. 
+	- sql_query : sql query for insert from staging table to facts table.
 
 #### Dimension Operator load_dimension.py
 - creates dimension table from data in staging tables.
 - parameters:
-	- tbd
+	- redshift_conn_id : name of Airflow connection to AWS Redshift database.
+    - table : name of target AWS Redshift database facts table. 
+    - insert_mode: value "delete-load" truncates table before inserting other values. All other values append data.
+	- sql_query : sql query for insert from staging table to facts table.
 
 
 #### Data Quality Operator data_quality.py
 - receive one or more SQL based test cases along with the expected results and execute the tests. 
 - For each the test, the test result and expected result needs to be checked and if there is no match, the operator should raise an exception and the task should retry and fail eventually.
 - parameters:
-	- tbd
-
-### SQL transformations
-- tbd
-
-## How to interact with project repository
-This sections describes:  
-- how to deploy the current project version and 
-- how to further develop the project
-
-### File and folder overview
-- documentation "README.MD": this file
-- configuration "dwh.cfg": contains the required credentials for a connection to the AWS Redshift database and the S3 location of the JSON source data.
-- module "sql_queries.py": contains all SQL statements to 
-    - create and drop tables.
-    - insert records into tables.
-    - copy source data from S3 into staging tables.
-    - additionally the path to the S3 files is read from file dwh.cfg.
-- module "create_tables.py": contains all functions to
-    - drop all tables.
-    - create all tables.
-- module "etl.py": see section above on ETL process.
-
-### Deployment of current project version
-
-#### Prerequistes for connection to AWS Redshift database
-In AWS the Redshift database needs to be setup and a corresponding IAM user defined. This IAM user requires a role policy that enable read-only access to the AWS S3 service. The relevent configurations for a database connection from these need to be stored in the dwh.cfg file.
-
-#### Prerequisites for Python scripts
-To run the scripts, the Python environment and packages need to be set up correctly. Required packages for modules and notebooks are:
-configparser                  5.0.1
-pandas                        0.23.3  
-psycopg2                      2.7.4 
-
-#### Step 1: Create database tables via module create_tables.py
-Open console and navigate to project directory.   
-Run command "python create_tables.py".  
-Note: prerequisite is no other open database connection.  
-
-#### Step 2: Extract data from input files, transform and load results to database via module etl.py 
-Open console and navigate to project directory.   
-Run command "python etl.py".  
-Note: prerequisite is no other open database connection.  
-
-### Further development
-- Any further development of database will have effects on the modules sql_queries.py and etl.py. Changes in these files need to be aligned.
-- Since module "create_tables" is essentially a wrapper for the SQL statements in sql_queries.py, there might not be the need to make any changes. 
-
+	- redshift_conn_id : name of Airflow connection to AWS Redshift database.
+    - sql_checks: list of sql queries for data quality checks. Data quality checks succeed, if the returned record are greater than one and not null.
 
 ## Example queries
 - get number of users per level:  

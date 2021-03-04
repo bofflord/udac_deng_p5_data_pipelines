@@ -48,8 +48,7 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     s3_bucket="udacity-dend",
     s3_key="song_data",
     json="auto ignorecase",
-    region="us-west-2",
-    #create_table_sql=SqlQueries.staging_songs_table_create
+    region="us-west-2"
 )
 
 load_songplays_table = LoadFactOperator(
@@ -100,14 +99,18 @@ run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     dag=dag,
     redshift_conn_id="redshift",
-    sql_checks = [
-                    """
-                    SELECT COUNT(*) FROM songplays
-                    """,
-                    """
-                    SELECT COUNT(*) FROM users
-                    """
-                 ]
+    dq_checks=[
+                {
+                    'check_sql': """SELECT COUNT(*) FROM songplays""", 
+                    'expected_result': 1 , 
+                    'comparison':'<'
+                },
+                {
+                    'check_sql': """SELECT COUNT(*) FROM users""", 
+                    'expected_result': 1 , 
+                    'comparison':'<'
+                }
+               ]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)
